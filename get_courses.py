@@ -16,8 +16,21 @@ ETH/LTC
 ETH/KICK
 ETH/USDT"""
 
-
-
+currency_names = {
+    'BTC': 'Bitcoin',
+    'DASH': 'Dash',
+    'ETH': 'Ethereum',
+    'ETC': 'Ethereum Classic',
+    'LTC': 'Litecoint',
+    'ZEC': 'ZCash',
+    'XRP': 'Ripple',
+    'XMR': 'Monero',
+    'DOGE': 'Dogecoin',
+    'WAVES': 'Waves',
+    'KICK': 'KickCoin',
+    'USDT': 'Tether',
+    'BCH': 'Bitcoin Cash',
+}
 
 import requests
 import json

@@ -27,7 +27,7 @@ const cssLoaderWithModules = {
 module.exports = {
   entry: [
     './src/app.jsx',
-    './scss/main.scss'
+    './assets/scss/main.scss'
   ],
   output: {
     path: path.join(__dirname, './build/'),
@@ -40,7 +40,7 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({fallback:"style-loader", use:"css-loader!sass-loader"})
+        loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader!sass-loader'})
       },
       {
         test: /\.js[x]?$/,
@@ -51,8 +51,9 @@ module.exports = {
         test: /\.monk$/,
         loader: 'monkberry-loader'
       },
-              { test: /\.less$/, include: /node_modules/, use: styles([cssLoader, 'less-loader']) },
-        { test: /\.less$/, exclude: /node_modules/, use: styles([cssLoaderWithModules, 'less-loader']) },
+      { test: /\.less$/, include: /node_modules/, use: styles([cssLoader, 'less-loader']) },
+      { test: /\.less$/, exclude: /node_modules/, use: styles([cssLoaderWithModules, 'less-loader']) },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'babel-loader?presets[]=es2015,presets[]=react!svg-react-loader' },
     ]
   },
   plugins: [
