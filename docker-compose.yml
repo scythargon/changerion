@@ -1,0 +1,7 @@
+version: '2.1'
+services:
+  app:
+    restart: always
+    build: .
+    ports:
+      - "8080:8001"
