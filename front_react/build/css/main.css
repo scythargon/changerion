@@ -67,3 +67,13 @@ button::-moz-focus-inner {
 
 #content {
   margin: 10px 0px 0px 10px; }
+
+.ant-col-8 > .ant-radio-group {
+  width: 100%; }
+
+.radio-table .ant-table-tbody > tr > td {
+  padding: 0 0; }
+
+.radio-table label.ant-radio-wrapper {
+  width: 100%;
+  padding: 16px 16px; }
