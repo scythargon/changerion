@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
+  ],
+  "presets": [
+    "stage-0",
+    ["es2015", { "modules": false }],
+    "latest",
+    "react",
+    "react-optimize"
+  ],
+}
+
