@@ -28,3 +28,8 @@
 .ant-radio-wrapper-checked {
   background: #e6f7ff;
 }
+
+.form-table .ant-table-tbody > tr > td,
+.form-table .ant-table-thead > tr > th {
+  border-bottom: none;
+}

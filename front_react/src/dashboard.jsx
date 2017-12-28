@@ -176,10 +176,10 @@ export default class Dashboard extends Component {
           </Col>
           <Col span={8}>
             <Table
+              className={'form-table'}
               columns={columnsForm}
               dataSource={columnsFormData}
               pagination={false}
-              bordered
             />
           </Col>
           <Col span={8}>
