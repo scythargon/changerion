@@ -22,7 +22,7 @@ app.jinja_loader = my_loader
 
 @app.route('/')
 def index():
-    return render_template('old_index.html')
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
