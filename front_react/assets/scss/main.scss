@@ -1,7 +1,9 @@
 @import "reset";
 
 #content {
-  margin: 10px 0px 0px 10px;
+  max-width: 950px;
+  margin: auto;
+  padding: 100px 0px 0px;
 
   .ant-form-item-control {
     line-height: 31px;
