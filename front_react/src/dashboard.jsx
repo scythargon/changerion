@@ -81,6 +81,7 @@ export default class Dashboard extends Component {
   }
 
   calcColumns() {
+    let { selectedReceive } = this.state;
     const columnsGiveData = pairs.map(pair => pair.give)
       .filter((value, index, self) => self.indexOf(value) === index)
       .map((give, index) => {
@@ -92,13 +93,21 @@ export default class Dashboard extends Component {
 
     const columnsReceiveData = pairs.filter(pair => pair.give === this.state.selectedGive)
       .map((pair, index) => {
+        if (!selectedReceive) {
+          selectedReceive = pair.receive;
+        }
         return {
           key: index,
           receive: <Radio value={pair.receive}>{pair.receive}</Radio>
         };
       });
     const columnsFormData = this.getColumnsFormData();
-    this.setState({ columnsGiveData, columnsReceiveData, columnsFormData });
+    this.setState({
+      columnsGiveData,
+      columnsReceiveData,
+      columnsFormData,
+      selectedReceive
+    });
   }
 
   update(args) {
@@ -132,7 +141,7 @@ export default class Dashboard extends Component {
             <RadioGroup
               name="give"
               defaultValue={this.state.selectedGive}
-              onChange={(event) => { this.update({ selectedGive: event.target.value }); }}
+              onChange={(event) => { this.update({ selectedGive: event.target.value, selectedReceive: '' }); }}
             >
               <Table
                 className={'radio-table'}
@@ -154,6 +163,7 @@ export default class Dashboard extends Component {
           <Col span={8}>
             <RadioGroup
               name="receive"
+              value={this.state.selectedReceive}
               onChange={(event) => { this.update({ selectedReceive: event.target.value }); }}
             >
               <Table
