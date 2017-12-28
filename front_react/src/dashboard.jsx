@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import { Table, Row, Col, Radio } from 'antd';
+import { WrappedNormalLoginForm } from './form.jsx';
 import 'antd/dist/antd.less';
 
 const RadioGroup = Radio.Group;
@@ -74,6 +74,7 @@ export default class Dashboard extends Component {
     selectedReceive: '',
     columnsGiveData: [],
     columnsReceiveData: [],
+    columnsFormData: []
   };
 
   componentDidMount() {
@@ -81,7 +82,7 @@ export default class Dashboard extends Component {
   }
 
   calcColumns() {
-    let { selectedReceive } = this.state;
+    let { selectedGive, selectedReceive } = this.state;
     const columnsGiveData = pairs.map(pair => pair.give)
       .filter((value, index, self) => self.indexOf(value) === index)
       .map((give, index) => {
@@ -101,7 +102,7 @@ export default class Dashboard extends Component {
           receive: <Radio value={pair.receive}>{pair.receive}</Radio>
         };
       });
-    const columnsFormData = this.getColumnsFormData();
+    const columnsFormData = this.getColumnsFormData(selectedGive, selectedReceive);
     this.setState({
       columnsGiveData,
       columnsReceiveData,
@@ -114,14 +115,13 @@ export default class Dashboard extends Component {
     this.setState(args, _ => { this.calcColumns(); });
   }
 
-  getColumnsFormData() {
-    const { selectedGive, selectedReceive } = this.state;
+  getColumnsFormData(selectedGive, selectedReceive) {
     let result = '';
 
     if (!selectedGive || !selectedReceive) {
       result = 'Пожалуйста, выберите направление обмена';
     } else {
-      result = 'FORMA!';
+      result = <WrappedNormalLoginForm/>;
     }
 
     return [{

@@ -2,6 +2,14 @@
 
 #content {
   margin: 10px 0px 0px 10px;
+
+  .ant-form-item-control {
+    line-height: 31px;
+  }
+
+  .ant-form-item {
+    margin-bottom: 8px;
+  }
 }
 
 .ant-col-8 > .ant-radio-group {
@@ -15,4 +23,8 @@
 .radio-table label.ant-radio-wrapper {
   width: 100%;
   padding: 16px 16px;
+}
+
+.ant-radio-wrapper-checked {
+  background: #e6f7ff;
 }
