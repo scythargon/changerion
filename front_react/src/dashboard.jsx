@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Row, Col, Radio } from 'antd';
-import { WrappedNormalLoginForm } from './form.jsx';
+import { WrappedExchangeForm } from './form.jsx';
 import { getIcon } from './utils';
 
 import 'antd/dist/antd.less';
@@ -122,7 +122,7 @@ export default class Dashboard extends Component {
     if (!selectedGive || !selectedReceive) {
       result = 'Пожалуйста, выберите направление обмена';
     } else {
-      result = <WrappedNormalLoginForm/>;
+      result = <WrappedExchangeForm />;
     }
 
     return [{
