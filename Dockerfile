@@ -1,6 +1,10 @@
 FROM python:3.6
 ENV PYTHONUNBUFFERED 1
 
+RUN apt update && apt install -y vim nano less screen htop \
+    curl  \
+    --no-install-recommends
+
 RUN mkdir /code
 WORKDIR /code
 COPY requirements.txt /code/
