@@ -1,8 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button } from 'antd';
+import { getIcon } from './utils';
+
 const FormItem = Form.Item;
 
+const inputIconStyle = {
+  fillOpacity: 0.5,
+  height: '20px',
+  position: 'absolute',
+  top: '-10px',
+  left: '-7px',
+};
+
 class ExchangeForm extends React.Component {
+
+  static propTypes = {
+    pair: PropTypes.object.isRequired
+  };
+
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -20,7 +37,7 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('give_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={<Icon type="pay-circle" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="min: 100 BTC" />
+            <Input key="input" prefix={getIcon(this.props.pair.give, inputIconStyle)} placeholder="min: 100 BTC" />
           )}
         </FormItem>
         <FormItem key="receive_amount">
@@ -28,7 +45,7 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('receive_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={<Icon type="pay-circle" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="0" />
+            <Input key="input" prefix={getIcon(this.props.pair.receive, inputIconStyle)} placeholder="0" />
           )}
         </FormItem>
         <FormItem key="email">

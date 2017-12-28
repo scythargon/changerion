@@ -5,6 +5,8 @@ import { getIcon } from './utils';
 
 import 'antd/dist/antd.less';
 
+import styles from './styles.less';
+
 const RadioGroup = Radio.Group;
 
 const pairsData = [
@@ -42,6 +44,22 @@ const pairsData = [
   ['USDT', 'ETH'],
 ];
 
+const currencyNames = {
+  BTC: 'Bitcoin',
+  DASH: 'Dash',
+  ETH: 'Ethereum',
+  ETC: 'Ethereum Classic',
+  LTC: 'Litecoint',
+  ZEC: 'ZCash',
+  XRP: 'Ripple',
+  XMR: 'Monero',
+  DOGE: 'Dogecoin',
+  WAVES: 'Waves',
+  KICK: 'KickCoin',
+  USDT: 'Tether',
+  BCH: 'Bitcoin Cash',
+};
+
 
 class Pair {
   constructor(give, receive) {
@@ -68,11 +86,16 @@ const columnsForm = [{
   dataIndex: 'form',
 }];
 
+function findPair(give, receive){
+  return pairs.find(pair => pair.give === give && pair.receive === receive);
+}
+
 export default class Dashboard extends Component {
 
   state = {
     selectedGive: 'BTC',
     selectedReceive: '',
+    selectedPair: null,
     columnsGiveData: [],
     columnsReceiveData: [],
     columnsFormData: []
@@ -83,13 +106,15 @@ export default class Dashboard extends Component {
   }
 
   calcColumns() {
-    let { selectedGive, selectedReceive } = this.state;
+    const { selectedGive } = this.state;
+    let { selectedReceive, selectedPair } = this.state;
+
     const columnsGiveData = pairs.map(pair => pair.give)
       .filter((value, index, self) => self.indexOf(value) === index)
       .map((give, index) => {
         return {
           key: index,
-          give: <Radio value={give}>{getIcon(give)}{give}</Radio>
+          give: <Radio value={give}>{getIcon(give)}{currencyNames[give]} <span className={styles.minorSpan}>({give})</span></Radio>
         };
       });
 
@@ -100,15 +125,19 @@ export default class Dashboard extends Component {
         }
         return {
           key: index,
-          receive: <Radio value={pair.receive}>{getIcon(pair.receive)}{pair.receive}</Radio>
+          receive: <Radio value={pair.receive}>{getIcon(pair.receive)}{currencyNames[pair.receive]} <span className={styles.minorSpan}>({pair.receive})</span></Radio>
         };
       });
-    const columnsFormData = this.getColumnsFormData(selectedGive, selectedReceive);
+
+    selectedPair = findPair(selectedGive, selectedReceive);
+    const columnsFormData = this.getColumnsFormData(selectedPair);
+
     this.setState({
       columnsGiveData,
       columnsReceiveData,
       columnsFormData,
-      selectedReceive
+      selectedReceive,
+      selectedPair,
     });
   }
 
@@ -116,18 +145,10 @@ export default class Dashboard extends Component {
     this.setState(args, _ => { this.calcColumns(); });
   }
 
-  getColumnsFormData(selectedGive, selectedReceive) {
-    let result = '';
-
-    if (!selectedGive || !selectedReceive) {
-      result = 'Пожалуйста, выберите направление обмена';
-    } else {
-      result = <WrappedExchangeForm />;
-    }
-
+  getColumnsFormData(selectedPair) {
     return [{
       key: 1,
-      form: result,
+      form: <WrappedExchangeForm pair={selectedPair}/>,
     }];
   }
 

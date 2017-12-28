@@ -14,7 +14,7 @@ import LogoUSDT from '../../assets/img/icons/USDT.svg';
 
 import styles from './styles.less'; // Failed to make it work with .scss
 
-export function getIcon(currencyName) {
+export function getIcon(currencyName, style={}) {
   let LogoComponent = null;
   switch (currencyName) {
     case 'ETH':
@@ -72,5 +72,5 @@ export function getIcon(currencyName) {
     default:
       return '';
   }
-  return <LogoComponent className={styles.svgLogo} />;
+  return <LogoComponent className={styles.svgLogo} style={style} />;
 }
