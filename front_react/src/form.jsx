@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button } from 'antd';
 import { getIcon } from './utils';
+import styles from './styles.less';
 
 const FormItem = Form.Item;
 
@@ -30,15 +31,19 @@ class ExchangeForm extends React.Component {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    const giveCurrencyInfo = window.currencies_data[this.props.pair.give];
+    const { pair } = this.props;
+    const giveCurrencyInfo = window.currencies_data[pair.give];
+    const course = window.courses[`${pair.give}_${pair.receive}`];
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem key="give_amount">
+          <span className={styles.courseHeader}>1 { pair.give } ≈ { course } { pair.receive }</span>
+
           Отдаете сумму
           {getFieldDecorator('give_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={getIcon(this.props.pair.give, inputIconStyle)} placeholder={giveCurrencyInfo.minimal_deposit_amount} />
+            <Input key="input" prefix={getIcon(pair.give, inputIconStyle)} placeholder={giveCurrencyInfo.minimal_deposit_amount} />
           )}
         </FormItem>
         <FormItem key="receive_amount">
@@ -46,7 +51,7 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('receive_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={getIcon(this.props.pair.receive, inputIconStyle)} placeholder="0" />
+            <Input key="input" prefix={getIcon(pair.receive, inputIconStyle)} placeholder="0" />
           )}
         </FormItem>
         <FormItem key="email">

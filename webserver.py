@@ -8,7 +8,7 @@ import jinja2
 from flask import Flask, render_template, send_from_directory, request
 
 
-redis = redis_engine.StrictRedis(host="localhost", port=6379, db=0, charset="utf-8", decode_responses=True)
+redis = redis_engine.StrictRedis(host="localhost", port=6379, db=1, charset="utf-8", decode_responses=True)
 
 react_front = './front_react/build/'
 
@@ -61,9 +61,22 @@ def load_currencies_info():
     return currencies
 
 
+def get_courses():
+    keys = redis.keys('*')
+    for key in keys:
+        amount = redis.get(key)
+        give, receive = key.split('_')
+        yield {
+            'give': give,
+            'receive': receive,
+            'amount': float(amount) * 0.93
+        }
+
+
 @app.route('/')
 def index():
     currencies = load_currencies_info()
+    courses = get_courses()
     # currencies = [c.to_dict() for c in load_currencies_info()]
     return render_template('index.html', **locals())
 

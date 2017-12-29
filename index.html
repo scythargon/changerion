@@ -15,6 +15,12 @@
             {{ currency.code }}: {{ currency.to_dict()|safe }},
         {% endfor %}
       };
+
+      window.courses = {
+        {% for course in courses %}
+            {{ course.give }}_{{ course.receive }}: {{ course.amount }},
+        {% endfor %}
+      };
   </script>
 
   <script src="/static/js/main.js"></script>

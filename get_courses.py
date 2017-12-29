@@ -1,3 +1,7 @@
+import requests
+import json
+import redis as redis_engine
+
 
 pairs_text = """BTC/BCH
 BTC/DASH
@@ -31,9 +35,6 @@ currency_names = {
     'USDT': 'Tether',
     'BCH': 'Bitcoin Cash',
 }
-
-import requests
-import json
 
 cookies = {
     'lang': 'ru',
@@ -76,6 +77,7 @@ class Pair():
     def __repr__(self):
         return f'{self.give} => {self.amount} {self.receive}'
 
+redis = redis_engine.StrictRedis(host="localhost", port=6379, db=1, charset="utf-8", decode_responses=True)
 
 pairs=[]
 for p in pairs_text.split():
@@ -86,3 +88,6 @@ for p in pairs_text.split():
     p2 = Pair(receive, give, get_course(receive, give))
     print(p2)
     pairs.append(p2)
+
+for p in pairs:
+    redis.set(f'{p.give}_{p.receive}', p.amount)
