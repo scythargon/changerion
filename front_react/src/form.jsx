@@ -32,7 +32,7 @@ class ExchangeForm extends React.Component {
     const oldPair = this.props.pair;
     if (newPair.give !== oldPair.give ||
       newPair.receive !== oldPair.receive) {
-      this.props.form.setFieldsValue({ give_amount: 0, receive_amount: 0 });
+      this.props.form.setFieldsValue({ give_amount: '', receive_amount: '' });
     }
   }
 
