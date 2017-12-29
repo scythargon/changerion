@@ -63,7 +63,7 @@ class ExchangeForm extends React.Component {
   onGiveChange = (e) => {
     const { value } = e.target;
     const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value)) || value === '') {
+    if ((!isNaN(value) && reg.test(value) && parseFloat(value) >= this.getMinDeposit()) || value === '') {
       const receiveAmount = value === '' ? '' : (new Big(value)).times(this.getCourse()).format();
       this.setState({ giveAmount: value, receiveAmount });
       this.props.form.setFieldsValue({ giveAmount: value, receiveAmount: receiveAmount });
@@ -76,11 +76,16 @@ class ExchangeForm extends React.Component {
   onReceiveChange = (e) => {
     const { value } = e.target;
     const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    let ok = false;
     if ((!isNaN(value) && reg.test(value)) || value === '') {
       const giveAmount = value === '' ? '' : (new Big(value)).div(this.getCourse()).format();
-      this.setState({ giveAmount: giveAmount, receiveAmount: value });
-      this.props.form.setFieldsValue({ giveAmount: giveAmount, receiveAmount: value });
-    } else {
+      if (giveAmount >= this.getMinDeposit()) {
+        ok = true;
+        this.setState({ giveAmount: giveAmount, receiveAmount: value });
+        this.props.form.setFieldsValue({ giveAmount: giveAmount, receiveAmount: value });
+      }
+    }
+    if (!ok) {
       this.setState({ giveAmount: '', receiveAmount: '' });
       this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
     }
@@ -90,10 +95,14 @@ class ExchangeForm extends React.Component {
     return new Big(window.courses[`${pair.give}_${pair.receive}`]);
   }
 
+  getMinDeposit() {
+    return window.currencies_data[this.props.pair.give].minimal_deposit_amount;
+  }
+
   render() {
     const { pair } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const giveCurrencyInfo = window.currencies_data[pair.give];
+    const minDeposit = this.getMinDeposit();
     const course = this.getCourse().format();
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
@@ -109,7 +118,7 @@ class ExchangeForm extends React.Component {
               onChange={this.onGiveChange}
               onBlur={this.onGiveChange}
               prefix={getIcon(pair.give, inputIconStyle)}
-              placeholder={giveCurrencyInfo.minimal_deposit_amount}
+              placeholder={`min: ${minDeposit} ${pair.give}`}
             />
           )}
         </FormItem>
