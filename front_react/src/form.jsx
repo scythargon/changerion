@@ -30,9 +30,19 @@ class ExchangeForm extends React.Component {
   componentWillReceiveProps(nextProps) {
     const newPair = nextProps.pair;
     const oldPair = this.props.pair;
-    if (newPair.give !== oldPair.give ||
+
+    if (newPair.give !== oldPair.give &&
       newPair.receive !== oldPair.receive) {
-      this.props.form.setFieldsValue({ give_amount: '', receive_amount: '' });
+      this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
+      this.setState({ giveAmount: '', receiveAmount: '' });
+    } else if (newPair.give !== oldPair.give) {
+      const giveAmount = this.state.receiveAmount / this.getCourse(newPair);
+      this.props.form.setFieldsValue({ giveAmount });
+      this.setState({ giveAmount });
+    } else if (newPair.receive !== oldPair.receive) {
+      const receiveAmount = this.state.giveAmount * this.getCourse(newPair);
+      this.props.form.setFieldsValue({ receiveAmount});
+      this.setState({ receiveAmount });
     }
   }
 
@@ -51,7 +61,7 @@ class ExchangeForm extends React.Component {
     if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
       const receiveAmount = value * this.getCourse();
       this.setState({ giveAmount: value, receiveAmount });
-      this.props.form.setFieldsValue({ give_amount: value, receive_amount: receiveAmount });
+      this.props.form.setFieldsValue({ giveAmount: value, receiveAmount: receiveAmount });
     }
   };
 
@@ -61,12 +71,11 @@ class ExchangeForm extends React.Component {
     if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
       const giveAmount = value / this.getCourse();
       this.setState({ giveAmount: giveAmount, receiveAmount: value });
-      this.props.form.setFieldsValue({ give_amount: giveAmount, receive_amount: value });
+      this.props.form.setFieldsValue({ giveAmount: giveAmount, receiveAmount: value });
     }
   };
 
-  getCourse() {
-    const { pair } = this.props;
+  getCourse(pair = this.props.pair) {
     return window.courses[`${pair.give}_${pair.receive}`];
   }
 
@@ -77,11 +86,11 @@ class ExchangeForm extends React.Component {
     const course = this.getCourse();
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem key="give_amount">
+        <FormItem key="giveAmount">
           <span className={styles.courseHeader}>1 { pair.give } ≈ { course } { pair.receive }</span>
 
           Отдаете сумму
-          {getFieldDecorator('give_amount', {
+          {getFieldDecorator('giveAmount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
             <Input
@@ -92,9 +101,9 @@ class ExchangeForm extends React.Component {
             />
           )}
         </FormItem>
-        <FormItem key="receive_amount">
+        <FormItem key="receiveAmount">
           Получаете сумму
-          {getFieldDecorator('receive_amount', {
+          {getFieldDecorator('receiveAmount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
             <Input
