@@ -35,11 +35,11 @@ class ExchangeForm extends React.Component {
       newPair.receive !== oldPair.receive) {
       this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
       this.setState({ giveAmount: '', receiveAmount: '' });
-    } else if (newPair.give !== oldPair.give) {
+    } else if (newPair.give !== oldPair.give && this.state.receiveAmount) {
       const giveAmount = this.state.receiveAmount / this.getCourse(newPair);
       this.props.form.setFieldsValue({ giveAmount });
       this.setState({ giveAmount });
-    } else if (newPair.receive !== oldPair.receive) {
+    } else if (newPair.receive !== oldPair.receive && this.state.giveAmount) {
       const receiveAmount = this.state.giveAmount * this.getCourse(newPair);
       this.props.form.setFieldsValue({ receiveAmount});
       this.setState({ receiveAmount });
