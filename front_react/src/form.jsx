@@ -16,14 +16,27 @@ const inputIconStyle = {
 
 class ExchangeForm extends React.Component {
 
+  state = {
+    giveAmount: '',
+    receiveAmount: ''
+  };
+
   static propTypes = {
     pair: PropTypes.object.isRequired,
     updateParent: PropTypes.function.isRequired,
     form: PropTypes.object.isRequired
   };
 
+  componentWillReceiveProps(nextProps) {
+    const newPair = nextProps.pair;
+    const oldPair = this.props.pair;
+    if (newPair.give !== oldPair.give ||
+      newPair.receive !== oldPair.receive) {
+      this.props.form.setFieldsValue({ give_amount: 0, receive_amount: 0 });
+    }
+  }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -32,12 +45,36 @@ class ExchangeForm extends React.Component {
     });
   };
 
+  onGiveChange = (e) => {
+    const { value } = e.target;
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
+      const receiveAmount = value * this.getCourse();
+      this.setState({ giveAmount: value, receiveAmount });
+      this.props.form.setFieldsValue({ give_amount: value, receive_amount: receiveAmount });
+    }
+  };
+
+  onReceiveChange = (e) => {
+    const { value } = e.target;
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
+      const giveAmount = value / this.getCourse();
+      this.setState({ giveAmount: giveAmount, receiveAmount: value });
+      this.props.form.setFieldsValue({ give_amount: giveAmount, receive_amount: value });
+    }
+  };
+
+  getCourse() {
+    const { pair } = this.props;
+    return window.courses[`${pair.give}_${pair.receive}`];
+  }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { pair } = this.props;
+    const { getFieldDecorator } = this.props.form;
     const giveCurrencyInfo = window.currencies_data[pair.give];
-    const course = window.courses[`${pair.give}_${pair.receive}`];
+    const course = this.getCourse();
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem key="give_amount">
@@ -47,7 +84,12 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('give_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={getIcon(pair.give, inputIconStyle)} placeholder={giveCurrencyInfo.minimal_deposit_amount} />
+            <Input
+              key="input"
+              onChange={this.onGiveChange}
+              prefix={getIcon(pair.give, inputIconStyle)}
+              placeholder={giveCurrencyInfo.minimal_deposit_amount}
+            />
           )}
         </FormItem>
         <FormItem key="receive_amount">
@@ -55,7 +97,12 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('receive_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={getIcon(pair.receive, inputIconStyle)} placeholder="0" />
+            <Input
+              key="input"
+              onChange={this.onReceiveChange}
+              prefix={getIcon(pair.receive, inputIconStyle)}
+              placeholder="0"
+            />
           )}
         </FormItem>
         <FormItem key="email">
@@ -63,7 +110,11 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('email', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Например: name@mail.ru" />
+            <Input
+              key="input"
+              prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Например: name@mail.ru"
+            />
           )}
         </FormItem>
         <FormItem key="wallet">
@@ -71,7 +122,11 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('wallet', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={<Icon type="wallet" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Например: 42jytrdfvhyt456yh2343rgry6h56h4h46y" />
+            <Input
+              key="input"
+              prefix={<Icon type="wallet" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Например: 42jytrdfvhyt456yh2343rgry6h56h4h46y"
+            />
           )}
         </FormItem>
         <FormItem style={{ textAlign: 'center' }} key="submit">
