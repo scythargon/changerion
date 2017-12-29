@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import requests
 import json
 import redis as redis_engine
@@ -77,7 +79,7 @@ class Pair():
     def __repr__(self):
         return f'{self.give} => {self.amount} {self.receive}'
 
-redis = redis_engine.StrictRedis(host="localhost", port=6379, db=1, charset="utf-8", decode_responses=True)
+redis = redis_engine.StrictRedis(host="redis", port=6379, db=1, charset="utf-8", decode_responses=True)
 
 pairs=[]
 for p in pairs_text.split():

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import json
 import csv
 
@@ -8,7 +9,7 @@ import jinja2
 from flask import Flask, render_template, send_from_directory, request
 
 
-redis = redis_engine.StrictRedis(host="localhost", port=6379, db=1, charset="utf-8", decode_responses=True)
+redis = redis_engine.StrictRedis(host="redis", port=6379, db=1, charset="utf-8", decode_responses=True)
 
 react_front = './front_react/build/'
 

@@ -1,9 +1,19 @@
 version: '2.1'
 services:
+  redis:
+    image: redis:4
+    volumes:
+        - redis_data:/data
+
   app:
     restart: always
     build: .
+    depends_on:
+      - redis
     ports:
       - "8001:8080"
     volumes:
       - .:/code
+
+volumes:
+  redis_data:
