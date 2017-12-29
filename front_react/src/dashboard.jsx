@@ -210,10 +210,10 @@ export default class Dashboard extends Component {
           </Col>
         </Row>
         <div className={styles.footer}>
-          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ reviewsModalVisible: true }); }}>Отзывы</Button>
-          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ rulesModalVisible: true }); }}>Правила</Button>
-          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ reservsModalVisible: true }); }}>Резервы</Button>
-          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ contactsModalVisible: true }); }}>Контакты</Button>
+          <a onClick={(e) => { e.preventDefault(); this.update({ reviewsModalVisible: true }); }}>Отзывы</a>
+          <a onClick={(e) => { e.preventDefault(); this.update({ rulesModalVisible: true }); }}>Правила</a>
+          <a onClick={(e) => { e.preventDefault(); this.update({ reservsModalVisible: true }); }}>Резервы</a>
+          <a onClick={(e) => { e.preventDefault(); this.update({ contactsModalVisible: true }); }}>Контакты</a>
         </div>
         <ReviewsModal visible={reviewsModalVisible} updateParent={this.update} />
         <RulesModal visible={rulesModalVisible} updateParent={this.update} />
