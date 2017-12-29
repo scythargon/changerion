@@ -17,11 +17,13 @@ const inputIconStyle = {
 class ExchangeForm extends React.Component {
 
   static propTypes = {
-    pair: PropTypes.object.isRequired
+    pair: PropTypes.object.isRequired,
+    updateParent: PropTypes.function.isRequired,
+    form: PropTypes.object.isRequired
   };
 
 
-  handleSubmit = (e) => {
+  handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -29,6 +31,8 @@ class ExchangeForm extends React.Component {
       }
     });
   };
+
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { pair } = this.props;
@@ -72,7 +76,7 @@ class ExchangeForm extends React.Component {
         </FormItem>
         <FormItem style={{ textAlign: 'center' }} key="submit">
           <span style={{ fontSize: '12px', wordBreak: 'break-word', lineHeight: 1.6, display: 'block', padding: '8px' }}>
-            Нажимая кнопку «Обменять», я соглашаюсь с <a href="">правилами обмена</a>
+            Нажимая кнопку «Обменять», я соглашаюсь с <a onClick={e => { e.preventDefault(); this.props.updateParent({ rulesModalVisible: true }); }}>правилами обмена</a>
           </span>
           <Button type="primary" htmlType="submit" className="login-form-button" size="large">
             <b>ОБМЕНЯТЬ</b>

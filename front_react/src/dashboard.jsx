@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Row, Col, Radio } from 'antd';
+import { Table, Row, Col, Radio, Button } from 'antd';
 import { WrappedExchangeForm } from './form.jsx';
 import { getIcon } from './utils';
+import { RulesModal, ReservsModal, ContactsModal, ReviewsModal } from './modals';
 
 import 'antd/dist/antd.less';
 
@@ -86,7 +87,7 @@ const columnsForm = [{
   dataIndex: 'form',
 }];
 
-function findPair(give, receive){
+function findPair(give, receive) {
   return pairs.find(pair => pair.give === give && pair.receive === receive);
 }
 
@@ -98,7 +99,11 @@ export default class Dashboard extends Component {
     selectedPair: null,
     columnsGiveData: [],
     columnsReceiveData: [],
-    columnsFormData: []
+    columnsFormData: [],
+    rulesModalVisible: false,
+    reservsModalVisible: false,
+    contactsModalVisible: false,
+    reviewsModalVisible: false,
   };
 
   componentDidMount() {
@@ -141,23 +146,29 @@ export default class Dashboard extends Component {
     });
   }
 
-  update(args) {
-    this.setState(args, _ => { this.calcColumns(); });
-  }
+  update = (args) => {
+    this.setState(args, () => { this.calcColumns(); });
+  };
 
   getColumnsFormData(selectedPair) {
     return [{
       key: 1,
-      form: <WrappedExchangeForm pair={selectedPair}/>,
+      form: <WrappedExchangeForm pair={selectedPair} updateParent={this.update} />,
     }];
   }
 
   render() {
-    const { columnsGiveData, columnsReceiveData, columnsFormData } = this.state;
+    const {
+      columnsGiveData,
+      columnsReceiveData,
+      columnsFormData,
+      rulesModalVisible,
+      reservsModalVisible,
+      contactsModalVisible,
+      reviewsModalVisible
+    } = this.state;
     return (
       <div>
-        {/*{ pairs.map(pair => <div>{pair.give} to {pair.receive}</div>) }*/}
-
         <Row>
           <Col span={8}>
             <RadioGroup
@@ -166,7 +177,7 @@ export default class Dashboard extends Component {
               onChange={(event) => { this.update({ selectedGive: event.target.value, selectedReceive: '' }); }}
             >
               <Table
-                className={'radio-table'}
+                className="radio-table"
                 columns={columnsGive}
                 dataSource={columnsGiveData}
                 pagination={false}
@@ -176,7 +187,7 @@ export default class Dashboard extends Component {
           </Col>
           <Col span={8}>
             <Table
-              className={'form-table'}
+              className="form-table"
               columns={columnsForm}
               dataSource={columnsFormData}
               pagination={false}
@@ -189,7 +200,7 @@ export default class Dashboard extends Component {
               onChange={(event) => { this.update({ selectedReceive: event.target.value }); }}
             >
               <Table
-                className={'radio-table'}
+                className="radio-table"
                 columns={columnsReceive}
                 dataSource={columnsReceiveData}
                 pagination={false}
@@ -198,6 +209,16 @@ export default class Dashboard extends Component {
             </RadioGroup>
           </Col>
         </Row>
+        <div className={styles.footer}>
+          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ reviewsModalVisible: true }); }}>Отзывы</Button>
+          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ rulesModalVisible: true }); }}>Правила</Button>
+          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ reservsModalVisible: true }); }}>Резервы</Button>
+          <Button size="small" onClick={(e) => { e.preventDefault(); this.update({ contactsModalVisible: true }); }}>Контакты</Button>
+        </div>
+        <ReviewsModal visible={reviewsModalVisible} updateParent={this.update} />
+        <RulesModal visible={rulesModalVisible} updateParent={this.update} />
+        <ReservsModal visible={reservsModalVisible} updateParent={this.update} />
+        <ContactsModal visible={contactsModalVisible} updateParent={this.update} />
       </div>
     );
   }

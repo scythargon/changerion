@@ -68,7 +68,7 @@ button::-moz-focus-inner {
 #content {
   max-width: 950px;
   margin: auto;
-  padding: 100px 0px 0px; }
+  padding: 80px 0px 0px; }
   #content .ant-form-item-control {
     line-height: 31px; }
   #content .ant-form-item {
