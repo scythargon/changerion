@@ -8,6 +8,15 @@
 
   <div id='content'></div>
 
+  <script type="text/javascript">
+      // window.currencies_data = {{ currencies|safe }};
+      window.currencies_data = {
+        {% for currency in currencies %}
+            {{ currency.code }}: {{ currency.to_dict()|safe }},
+        {% endfor %}
+      };
+  </script>
+
   <script src="/static/js/main.js"></script>
   <script src="//localhost:35729/livereload.js"></script>
 

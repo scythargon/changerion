@@ -30,6 +30,7 @@ class ExchangeForm extends React.Component {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
+    const giveCurrencyInfo = window.currencies_data[this.props.pair.give];
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem key="give_amount">
@@ -37,7 +38,7 @@ class ExchangeForm extends React.Component {
           {getFieldDecorator('give_amount', {
             rules: [{ required: true, message: 'Обязательное поле' }],
           })(
-            <Input key="input" prefix={getIcon(this.props.pair.give, inputIconStyle)} placeholder="min: 100 BTC" />
+            <Input key="input" prefix={getIcon(this.props.pair.give, inputIconStyle)} placeholder={giveCurrencyInfo.minimal_deposit_amount} />
           )}
         </FormItem>
         <FormItem key="receive_amount">

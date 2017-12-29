@@ -1,14 +1,14 @@
-BTC|14PYfJnauYY2ugczKU2snKZg3rZV6WjAZz|Минимальная сумма депозита 0.001 BTC||Зачисление происходит автоматически после 1 подтверждения сетью
-LTC|LL2FG8zNDJKGDKm5miaRfLipquSfBirpe5|Минимальная сумма депозита 0.001 LTC||Зачисление происходит автоматически после 1 подтверждения сетью
-DOGE|DDyYv5RR2CC2adRKEzKHk5qfney1DZqH91|Минимальная сумма депозита 10 DOGE||Зачисление происходит автоматически после 1 подтверждения сетью
-DASH|Xp2sY4yN9rJHxy2h1Eb7MZP4ALKaLtuzzJ|Минимальная сумма депозита 0.01 DASH||Зачисление происходит автоматически после 1 подтверждения сетью
-ETH|0x41f1f469250a7e654f8c4cd1e83d68a3df0f2ff5|Минимальная сумма депозита 0.01 ETH||Зачисление происходит автоматически после 1 подтверждения сетью
-WAVES|3PBjVuA8P7jzB5LfZqZRHJBdYpxaG1PxeWG|Минимальная сумма депозита 0.01 WAVES |Тип операции (Asset Transfer) должен быть 4. Транзакции другого типа зачислены не будут. Пожалуйста, будьте внимательны!|Зачисление происходит автоматически после 10 подтверждения сетью
-ZEC|t1UqqbtxgtgRmyn95ovu27tTwTHyD82bmMx|Минимальная сумма депозита 0.01 ZEC||Зачисление происходит автоматически после 20 подтверждения сетью
-USDT|1BqN9vWEPjrjYiXqq6tFVu9gU3A7CPqCd8|Минимальная сумма депозита 10 USDT|Комиссия 15 USDT|Зачисление происходит автоматически после 2 подтверждения сетью
-XMR|4Hm3YrYNgczRAP7jbGCZ7vA8XwbBR8DWMU7Bm9FKZqjxQXPPcwMP1kDbK3mtBSdt2c6TmLCPiMSXa39uBiEBwkg4FQPtx2Eeje6Gx5WPhh|Минимальная сумма депозита 0.1 XMR||
-XRP|rUocf1ixKzTuEe34kmVhRvGqNCofY1NJzV|Минимальная сумма депозита 10 XRP|Destination tag: 1107801608|
-KICK|0x0db16fc26d86a145d06c7bd76676549237538633|Минимальная сумма депозита 100 KICK|Комиссия 50 KICK|
-ETC|0x0721a757a21dd4cc91428cf12bd4206d8d028fad|Минимальная сумма депозита 0.1 ETC||Зачисление происходит автоматически после 20 подтверждения сетью
-BCH|1326AwPPCB9knP36hPG2g4fRZqM9jZgNUh|Минимальная сумма депозита 0.001 BCH||Зачисление происходит автоматически после 1 подтверждения сетью
-EX-CODE||||
+code|wallet_address|minimal_deposit_amount|fee|comment
+BTC|14PYfJnauYY2ugczKU2snKZg3rZV6WjAZz|min: 0.001 BTC||Зачисление происходит автоматически после 1 подтверждения сетью
+LTC|LL2FG8zNDJKGDKm5miaRfLipquSfBirpe5|min: 0.001 LTC||Зачисление происходит автоматически после 1 подтверждения сетью
+DOGE|DDyYv5RR2CC2adRKEzKHk5qfney1DZqH91|min: 10 DOGE||Зачисление происходит автоматически после 1 подтверждения сетью
+DASH|Xp2sY4yN9rJHxy2h1Eb7MZP4ALKaLtuzzJ|min: 0.01 DASH||Зачисление происходит автоматически после 1 подтверждения сетью
+ETH|0x41f1f469250a7e654f8c4cd1e83d68a3df0f2ff5|min: 0.01 ETH||Зачисление происходит автоматически после 1 подтверждения сетью
+WAVES|3PBjVuA8P7jzB5LfZqZRHJBdYpxaG1PxeWG|min: 0.01 WAVES |Тип операции (Asset Transfer) должен быть 4. Транзакции другого типа зачислены не будут. Пожалуйста, будьте внимательны!|Зачисление происходит автоматически после 10 подтверждения сетью
+ZEC|t1UqqbtxgtgRmyn95ovu27tTwTHyD82bmMx|min: 0.01 ZEC||Зачисление происходит автоматически после 20 подтверждения сетью
+USDT|1BqN9vWEPjrjYiXqq6tFVu9gU3A7CPqCd8|min: 10 USDT|Комиссия 15 USDT|Зачисление происходит автоматически после 2 подтверждения сетью
+XMR|4Hm3YrYNgczRAP7jbGCZ7vA8XwbBR8DWMU7Bm9FKZqjxQXPPcwMP1kDbK3mtBSdt2c6TmLCPiMSXa39uBiEBwkg4FQPtx2Eeje6Gx5WPhh|min: 0.1 XMR||
+XRP|rUocf1ixKzTuEe34kmVhRvGqNCofY1NJzV|min: 10 XRP|Destination tag: 1107801608|
+KICK|0x0db16fc26d86a145d06c7bd76676549237538633|min: 100 KICK|Комиссия 50 KICK|
+ETC|0x0721a757a21dd4cc91428cf12bd4206d8d028fad|min: 0.1 ETC||Зачисление происходит автоматически после 20 подтверждения сетью
+BCH|1326AwPPCB9knP36hPG2g4fRZqM9jZgNUh|min: 0.001 BCH||Зачисление происходит автоматически после 1 подтверждения сетью
