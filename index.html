@@ -28,7 +28,7 @@
 
       window.courses = {
         {% for course in courses %}
-            {{ course.give }}_{{ course.receive }}: {{ course.amount }},
+            {{ course.give }}_{{ course.receive }}: '{{ course.amount }}',
         {% endfor %}
       };
   </script>

@@ -2,6 +2,7 @@
 
 import json
 import csv
+from decimal import Decimal
 
 import redis as redis_engine
 import jinja2
@@ -67,10 +68,11 @@ def get_courses():
     for key in keys:
         amount = redis.get(key)
         give, receive = key.split('_')
+        amount = Decimal(amount) * Decimal("0.93")
         yield {
             'give': give,
             'receive': receive,
-            'amount': float(amount) * 0.93
+            'amount': format(amount, 'f')
         }
 
 

@@ -2,6 +2,7 @@
 
 import requests
 import json
+from decimal import Decimal
 import redis as redis_engine
 
 
@@ -66,7 +67,9 @@ def get_course(give, receive):
      'quantity': 0})
 
     response = requests.post('https://exmo.me/ctrl/calculateOffer/approximately', headers=headers, cookies=cookies, data=data)
-    will_get_for_one = float(json.loads(response.text)['data']['best'])
+    will_get_for_one = json.loads(response.text)['data']['best']
+    print(will_get_for_one)
+    will_get_for_one = Decimal(will_get_for_one)
     return will_get_for_one
 
 

@@ -83,7 +83,7 @@ const columnsReceive = [{
 }];
 
 const columnsForm = [{
-  title: 'Самые низкие цены!',
+  title: 'Самые выгодные цены!',
   dataIndex: 'form',
 }];
 

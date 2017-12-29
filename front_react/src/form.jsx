@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Big from 'big.js';
 import { Form, Icon, Input, Button } from 'antd';
 import { getIcon } from './utils';
 import styles from './styles.less';
@@ -12,6 +13,10 @@ const inputIconStyle = {
   position: 'absolute',
   top: '-10px',
   left: '-7px',
+};
+
+Big.prototype.format = function() {
+  return this.toFixed(30).toString().replace(/0+$/, '');
 };
 
 class ExchangeForm extends React.Component {
@@ -36,11 +41,11 @@ class ExchangeForm extends React.Component {
       this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
       this.setState({ giveAmount: '', receiveAmount: '' });
     } else if (newPair.give !== oldPair.give && this.state.receiveAmount) {
-      const giveAmount = this.state.receiveAmount / this.getCourse(newPair);
+      const giveAmount = (new Big(this.state.receiveAmount)).div(this.getCourse(newPair)).format();
       this.props.form.setFieldsValue({ giveAmount });
       this.setState({ giveAmount });
     } else if (newPair.receive !== oldPair.receive && this.state.giveAmount) {
-      const receiveAmount = this.state.giveAmount * this.getCourse(newPair);
+      const receiveAmount = (new Big(this.state.giveAmount)).times(this.getCourse(newPair)).format();
       this.props.form.setFieldsValue({ receiveAmount});
       this.setState({ receiveAmount });
     }
@@ -57,33 +62,39 @@ class ExchangeForm extends React.Component {
 
   onGiveChange = (e) => {
     const { value } = e.target;
-    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
-      const receiveAmount = value * this.getCourse();
+    const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    if ((!isNaN(value) && reg.test(value)) || value === '') {
+      const receiveAmount = value === '' ? '' : (new Big(value)).times(this.getCourse()).format();
       this.setState({ giveAmount: value, receiveAmount });
       this.props.form.setFieldsValue({ giveAmount: value, receiveAmount: receiveAmount });
+    } else {
+      this.setState({ giveAmount: '', receiveAmount: '' });
+      this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
     }
   };
 
   onReceiveChange = (e) => {
     const { value } = e.target;
-    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
-    if ((!isNaN(value) && reg.test(value)) || value === '' || value === '-') {
-      const giveAmount = value / this.getCourse();
+    const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
+    if ((!isNaN(value) && reg.test(value)) || value === '') {
+      const giveAmount = value === '' ? '' : (new Big(value)).div(this.getCourse()).format();
       this.setState({ giveAmount: giveAmount, receiveAmount: value });
       this.props.form.setFieldsValue({ giveAmount: giveAmount, receiveAmount: value });
+    } else {
+      this.setState({ giveAmount: '', receiveAmount: '' });
+      this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
     }
   };
 
   getCourse(pair = this.props.pair) {
-    return window.courses[`${pair.give}_${pair.receive}`];
+    return new Big(window.courses[`${pair.give}_${pair.receive}`]);
   }
 
   render() {
     const { pair } = this.props;
     const { getFieldDecorator } = this.props.form;
     const giveCurrencyInfo = window.currencies_data[pair.give];
-    const course = this.getCourse();
+    const course = this.getCourse().format();
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem key="giveAmount">
@@ -96,6 +107,7 @@ class ExchangeForm extends React.Component {
             <Input
               key="input"
               onChange={this.onGiveChange}
+              onBlur={this.onGiveChange}
               prefix={getIcon(pair.give, inputIconStyle)}
               placeholder={giveCurrencyInfo.minimal_deposit_amount}
             />
@@ -109,6 +121,7 @@ class ExchangeForm extends React.Component {
             <Input
               key="input"
               onChange={this.onReceiveChange}
+              onBlur={this.onReceiveChange}
               prefix={getIcon(pair.receive, inputIconStyle)}
               placeholder="0"
             />
