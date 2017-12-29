@@ -16,7 +16,7 @@ const inputIconStyle = {
 };
 
 Big.prototype.format = function() {
-  return this.toFixed(30).toString().replace(/0+$/, '');
+  return this.toFixed(30).toString().replace(/.?0+$/, '');
 };
 
 class ExchangeForm extends React.Component {
