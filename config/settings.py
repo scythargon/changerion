@@ -25,7 +25,8 @@ SECRET_KEY = '6cbp4dka29emq_8j07_8=xx9#d5jr0hf#@zl()g42irxpmf#ix'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = ['127.0.0.1']
 
 
 # Application definition
@@ -123,3 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    ('', os.path.join(BASE_DIR, "frontend/build")),
+]
