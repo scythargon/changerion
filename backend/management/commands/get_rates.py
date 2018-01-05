@@ -67,24 +67,28 @@ class Pair():
         return f'{self.give} => {self.amount} {self.receive}'
 
 
+def update_rates():
+    pairs = []
+    for p in pairs_text.split():
+        give, receive = p.split('/')
+        p1 = Pair(give, receive, get_course(give, receive))
+        print(p1)
+        pairs.append(p1)
+        p2 = Pair(receive, give, get_course(receive, give))
+        print(p2)
+        pairs.append(p2)
+
+    data_to_save = {}
+
+    for p in pairs:
+        data_to_save[f'{p.give}_{p.receive}'] = p.amount
+
+    new_rate = Rate.objects.create(data=data_to_save)
+
+    print(data_to_save)
+    print(f'saved to db, Rates instance #{new_rate.pk}')
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        pairs = []
-        for p in pairs_text.split():
-            give, receive = p.split('/')
-            p1 = Pair(give, receive, get_course(give, receive))
-            print(p1)
-            pairs.append(p1)
-            p2 = Pair(receive, give, get_course(receive, give))
-            print(p2)
-            pairs.append(p2)
-
-        data_to_save = {}
-
-        for p in pairs:
-            data_to_save[f'{p.give}_{p.receive}'] = p.amount
-
-        new_rate = Rate.objects.create(data=data_to_save)
-
-        print(data_to_save)
-        print(f'saved to db, Rates instance #{new_rate.pk}')
+        update_rates()
