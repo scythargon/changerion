@@ -1,9 +1,7 @@
 import csv
 from decimal import Decimal
-import redis as redis_engine
 
-
-redis = redis_engine.StrictRedis(host="redis", port=6379, db=1, charset="utf-8", decode_responses=True)
+from .models import Rate
 
 
 class Currency():
@@ -43,11 +41,11 @@ def load_currencies_info():
     return currencies
 
 
-def get_courses():
-    keys = redis.keys('*')
-    for key in keys:
-        amount = redis.get(key)
-        give, receive = key.split('_')
+def get_rates():
+    """Get rates from the DB, add our fee and yield them as dictionaries."""
+    rates = Rate.objects.last().data
+    for pair_name, amount in rates.items():
+        give, receive = pair_name.split('_')
         amount = Decimal(amount) * Decimal("0.93")
         yield {
             'give': give,

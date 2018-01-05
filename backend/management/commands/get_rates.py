@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
-
 import requests
 import json
 from decimal import Decimal
-import redis as redis_engine
 
+from django.core.management.base import BaseCommand
+
+from backend.models import Rate
 
 pairs_text = """BTC/BCH
 BTC/DASH
@@ -22,22 +22,6 @@ ETH/BCH
 ETH/LTC
 ETH/KICK
 ETH/USDT"""
-
-currency_names = {
-    'BTC': 'Bitcoin',
-    'DASH': 'Dash',
-    'ETH': 'Ethereum',
-    'ETC': 'Ethereum Classic',
-    'LTC': 'Litecoint',
-    'ZEC': 'ZCash',
-    'XRP': 'Ripple',
-    'XMR': 'Monero',
-    'DOGE': 'Dogecoin',
-    'WAVES': 'Waves',
-    'KICK': 'KickCoin',
-    'USDT': 'Tether',
-    'BCH': 'Bitcoin Cash',
-}
 
 cookies = {
     'lang': 'ru',
@@ -59,17 +43,17 @@ headers = {
 
 def get_course(give, receive):
     data = json.dumps({'amount': 0,
-     'balance': 0,
-     'balance2': 0,
-     'csrf_token': '',
-     'currencyGive': give,
-     'currencyReceive': receive,
-     'quantity': 0})
+                       'balance': 0,
+                       'balance2': 0,
+                       'csrf_token': '',
+                       'currencyGive': give,
+                       'currencyReceive': receive,
+                       'quantity': 0})
 
     response = requests.post('https://exmo.me/ctrl/calculateOffer/approximately', headers=headers, cookies=cookies, data=data)
     will_get_for_one = json.loads(response.text)['data']['best']
     print(will_get_for_one)
-    will_get_for_one = Decimal(will_get_for_one)
+    # will_get_for_one = Decimal(will_get_for_one)
     return will_get_for_one
 
 
@@ -82,17 +66,25 @@ class Pair():
     def __repr__(self):
         return f'{self.give} => {self.amount} {self.receive}'
 
-redis = redis_engine.StrictRedis(host="redis", port=6379, db=1, charset="utf-8", decode_responses=True)
 
-pairs=[]
-for p in pairs_text.split():
-    give,receive = p.split('/')
-    p1 = Pair(give, receive, get_course(give, receive))
-    print(p1)
-    pairs.append(p1)
-    p2 = Pair(receive, give, get_course(receive, give))
-    print(p2)
-    pairs.append(p2)
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        pairs = []
+        for p in pairs_text.split():
+            give, receive = p.split('/')
+            p1 = Pair(give, receive, get_course(give, receive))
+            print(p1)
+            pairs.append(p1)
+            p2 = Pair(receive, give, get_course(receive, give))
+            print(p2)
+            pairs.append(p2)
 
-for p in pairs:
-    redis.set(f'{p.give}_{p.receive}', p.amount)
+        data_to_save = {}
+
+        for p in pairs:
+            data_to_save[f'{p.give}_{p.receive}'] = p.amount
+
+        new_rate = Rate.objects.create(data=data_to_save)
+
+        print(data_to_save)
+        print(f'saved to db, Rates instance #{new_rate.pk}')
