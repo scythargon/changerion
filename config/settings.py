@@ -81,7 +81,7 @@ DB = {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': 'crypto_exchange',
     'USER': 'postgres',
-    'PASSWORD': '',
+    'PASSWORD': 'password',
     'HOST': 'postgres',
 }
 

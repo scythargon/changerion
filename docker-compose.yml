@@ -6,7 +6,7 @@ services:
     healthcheck:
       test: "exit 0"
     environment:
-      - POSTGRES_PASSWORD=''
+      - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=crypto_exchange
     volumes:
