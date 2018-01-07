@@ -1,10 +1,12 @@
 import requests
 import json
-from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 
+from robust import task as async_task
+
 from backend.models import Rate
+
 
 pairs_text = """BTC/BCH
 BTC/DASH
@@ -87,6 +89,11 @@ def update_rates():
 
     print(data_to_save)
     print(f'saved to db, Rates instance #{new_rate.pk}')
+
+
+@async_task()
+def async_update_rates():
+    update_rates()
 
 
 class Command(BaseCommand):

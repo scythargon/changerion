@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'backend',
+    'robust.apps.RobustConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,15 +77,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'crypto_exchange',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'postgres',
-    }
+DB = {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'crypto_exchange',
+    'USER': 'postgres',
+    'PASSWORD': '',
+    'HOST': 'postgres',
 }
+
+DATABASES = {
+    'default': DB,
+    'robust_ratelimit': DB,
+}
+
+from datetime import timedelta
+
+ROBUST_SCHEDULE = [
+    (timedelta(minutes=1), 'backend.management.commands.get_rates.async_update_rates'),
+]
 
 
 # Password validation
