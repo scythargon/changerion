@@ -60,13 +60,25 @@ class ExchangeForm extends React.Component {
     });
   };
 
+  getReceiveValue(value) {
+    return (new Big(value)).times(this.getCourse()).format();
+  }
+
+  getGiveValue(value) {
+    return (new Big(value)).div(this.getCourse()).format();
+  }
+
   onGiveChange = (e) => {
     const { value } = e.target;
     const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if ((!isNaN(value) && reg.test(value) && parseFloat(value) >= this.getMinDeposit()) || value === '') {
-      const receiveAmount = value === '' ? '' : (new Big(value)).times(this.getCourse()).format();
+      if (value === this.state.giveAmount) {
+        return;
+      }
+
+      const receiveAmount = value === '' ? '' : this.getReceiveValue(value);
       this.setState({ giveAmount: value, receiveAmount });
-      this.props.form.setFieldsValue({ giveAmount: value, receiveAmount: receiveAmount });
+      this.props.form.setFieldsValue({ giveAmount: value, receiveAmount});
     } else {
       this.setState({ giveAmount: '', receiveAmount: '' });
       this.props.form.setFieldsValue({ giveAmount: '', receiveAmount: '' });
@@ -78,11 +90,14 @@ class ExchangeForm extends React.Component {
     const reg = /^(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     let ok = false;
     if ((!isNaN(value) && reg.test(value)) || value === '') {
-      const giveAmount = value === '' ? '' : (new Big(value)).div(this.getCourse()).format();
+      if (value === this.state.receiveAmount) {
+        return;
+      }
+      const giveAmount = value === '' ? '' : this.getGiveValue(value);
       if (giveAmount >= this.getMinDeposit()) {
         ok = true;
-        this.setState({ giveAmount: giveAmount, receiveAmount: value });
-        this.props.form.setFieldsValue({ giveAmount: giveAmount, receiveAmount: value });
+        this.setState({ giveAmount, receiveAmount: value });
+        this.props.form.setFieldsValue({ giveAmount, receiveAmount: value });
       }
     }
     if (!ok) {
