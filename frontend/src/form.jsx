@@ -19,6 +19,12 @@ Big.prototype.format = function() {
   return this.toFixed(30).toString().replace(/.?0+$/, '');
 };
 
+const getCookie = function(name) {
+  var value = '; ' + document.cookie;
+  var parts = value.split('; ' + name + '=');
+  if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
 class ExchangeForm extends React.Component {
 
   state = {
@@ -56,6 +62,21 @@ class ExchangeForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        fetch('/order/', {
+          method: 'POST',
+          mode: 'same-origin',
+          credentials: 'include',
+          body: JSON.stringify(values),
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        })
+          .then(response => response.json())
+          .then((data) => {
+            console.log(data);
+          });
       }
     });
   };

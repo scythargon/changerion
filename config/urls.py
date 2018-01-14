@@ -22,5 +22,6 @@ from backend import views
 urlpatterns = [
     # path('', views.root),
     url(r'^$', views.RootView.as_view()),
+    url(r'^order/$', views.OrderView.as_view()),
     url(r'^admin/', admin.site.urls),
 ]

@@ -1,21 +1,28 @@
 from django.shortcuts import render, HttpResponse, render_to_response
+from django.http import JsonResponse
 from django.template import RequestContext
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .utils import load_currencies_info, get_rates
 # def root(request):
 #     return render(request, 'index.html')
 
 
-class RootView(TemplateView):
+class RootView(View):
     template_name = 'index.html'
 
-    def get_context_data(self, **kwargs):
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
         currencies = load_currencies_info()
         rates = get_rates()
+        return render(request, self.template_name, locals())
 
-        # Right, Class Based Views are nice and handy I was told...
-        args = locals()
-        args.update(kwargs)
-        args.pop('self')
-        return super(TemplateView, self).get_context_data(**args)
+
+class OrderView(View):
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({'status': 'ok'})
+
+    def post(self, request, *args, **kwargs):
+        return JsonResponse({'status': 'ok'})
