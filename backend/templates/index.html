@@ -4,8 +4,6 @@
   <title>Обменник Биткоина и криптовалют, лучшие цены</title>
   <link href="/static/css/main.css" rel="stylesheet">
 
-{{ custom_variable }}
-
   {% if not debug %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111654234-1"></script>
@@ -29,6 +27,8 @@
             {{ currency.code }}: {{ currency.to_dict|safe }},
         {% endfor %}
       };
+
+      window.ratesId = {{ current_rates.pk }};
 
       window.courses = {
         {% for rate in rates %}

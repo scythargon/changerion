@@ -34,3 +34,5 @@ class Order(models.Model):
 
     status = models.CharField(choices=ORDER_STATUS_CHOICES, max_length=10, null=False, blank=False)
 
+    wallet = models.CharField(max_length=255, null=False, blank=False, default='')
+    email = models.CharField(max_length=255, null=False, blank=False, default='')

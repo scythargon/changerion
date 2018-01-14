@@ -43,12 +43,15 @@ def load_currencies_info():
 
 def get_rates():
     """Get rates from the DB, add our fee and yield them as dictionaries."""
-    rates = Rate.objects.last().data
-    for pair_name, amount in rates.items():
+    current_rates = Rate.objects.last()
+    rates_values = []
+    for pair_name, amount in current_rates.data.items():
         give, receive = pair_name.split('_')
         amount = Decimal(amount) * Decimal("0.93")
-        yield {
+        rates_values.append({
             'give': give,
             'receive': receive,
             'amount': format(amount, 'f')
-        }
+        })
+
+    return current_rates, rates_values

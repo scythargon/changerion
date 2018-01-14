@@ -61,6 +61,9 @@ class ExchangeForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        values.ratesId = window.ratesId;
+        values.give = this.props.pair.give;
+        values.receive = this.props.pair.receive;
         console.log('Received values of form: ', values);
         fetch('/order/', {
           method: 'POST',
