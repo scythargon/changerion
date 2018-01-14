@@ -55,6 +55,7 @@ class OrderView(View):
             'giveAmount': order.give_amount,
             'receiveAmount': order.receive_amount,
             'status': order.status,
-            'toWallet': to_wallet.wallet_address,
+            'ourWallet': to_wallet.wallet_address,
+            'clientWallet': order.wallet,
             'secondsLeft': seconds_left,
         })

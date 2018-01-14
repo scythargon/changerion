@@ -79,6 +79,7 @@ class ExchangeForm extends React.Component {
           .then(response => response.json())
           .then((data) => {
             console.log(data);
+            this.props.updateParent({ order: data });
           });
       }
     });

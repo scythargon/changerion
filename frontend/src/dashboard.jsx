@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Row, Col, Radio, Button } from 'antd';
+import Countdown from 'react-countdown-now';
 import { WrappedExchangeForm } from './form.jsx';
 import { getIcon } from './utils';
 import { RulesModal, ReservsModal, ContactsModal, ReviewsModal } from './modals';
@@ -91,6 +92,16 @@ function findPair(give, receive) {
   return pairs.find(pair => pair.give === give && pair.receive === receive);
 }
 
+const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a complete state
+    return null;
+  } else {
+    // Render a countdown
+    return <span>Заявка автоматически удалится через <b>{minutes} мин. {seconds} сек.</b></span>;
+  }
+};
+
 export default class Dashboard extends Component {
 
   state = {
@@ -104,6 +115,7 @@ export default class Dashboard extends Component {
     reservsModalVisible: false,
     contactsModalVisible: false,
     reviewsModalVisible: false,
+    order: null,
   };
 
   componentDidMount() {
@@ -165,50 +177,103 @@ export default class Dashboard extends Component {
       rulesModalVisible,
       reservsModalVisible,
       contactsModalVisible,
-      reviewsModalVisible
+      reviewsModalVisible,
+      order,
     } = this.state;
+    // const order = {
+    //   clientWallet: 'dfg',
+    //   give: 'BTC',
+    //   giveAmount: '1',
+    //   number: 151595795265,
+    //   ourWallet: '14PYfJnauYY2ugczKU2snKZg3rZV6WjAZz',
+    //   receive: 'BCH',
+    //   receiveAmount: '5.739763202',
+    //   secondsLeft: 600,
+    //   status: 'new',
+    // };
     return (
       <div>
-        <Row>
-          <Col span={8}>
-            <RadioGroup
-              name="give"
-              defaultValue={this.state.selectedGive}
-              onChange={(event) => { this.update({ selectedGive: event.target.value, selectedReceive: '' }); }}
-            >
-              <Table
-                className="radio-table"
-                columns={columnsGive}
-                dataSource={columnsGiveData}
-                pagination={false}
-                bordered
+        { order ?
+          <div>
+            <h2>ДЛЯ ЗАВЕРШЕНИЯ СОЗДАНИЯ ЗАЯВКИ № <u><b>{order.number}</b></u> ВАМ НЕОБХОДИМО:</h2>
+            <p className={styles.block}>
+              <span className={styles.step}>1</span>
+              Войти в свой кошелек.
+            </p>
+            <p className={styles.block}>
+              <span className={styles.step}>2</span>
+              Отправить <code>{order.giveAmount}</code> <b>{order.give}</b>
+              &nbsp; на кошелек <code>{order.ourWallet}</code>
+              <br/>
+              Вы получаете <code>{order.receiveAmount}</code> <b>{order.receive}</b> на Ваш кошелек <code>{order.clientWallet}</code>
+            </p>
+            <p className={`${styles.block} ${styles.last}`}>
+              <span className={styles.step}>3</span>
+              <b>Обязательно!</b>
+              <br/>
+              После оплаты обязательно нажать кнопку <b>Я оплатил</b>
+            </p>
+            <p style={{textAlign: 'center', marginBottom: '30px'}}>
+              <Button type="primary" style={{marginRight: '30px'}}>Я оплатил</Button>
+              <Button type="danger">Отменить заявку</Button>
+            </p>
+            <p style={{textAlign: 'center'}}>
+              <Countdown
+                date={Date.now() + (order.secondsLeft * 1000)}
+                renderer={countdownRenderer}
               />
-            </RadioGroup>
-          </Col>
-          <Col span={8}>
-            <Table
-              className="form-table"
-              columns={columnsForm}
-              dataSource={columnsFormData}
-              pagination={false}
-            />
-          </Col>
-          <Col span={8}>
-            <RadioGroup
-              name="receive"
-              value={this.state.selectedReceive}
-              onChange={(event) => { this.update({ selectedReceive: event.target.value }); }}
-            >
-              <Table
-                className="radio-table"
-                columns={columnsReceive}
-                dataSource={columnsReceiveData}
-                pagination={false}
-                bordered
-              />
-            </RadioGroup>
-          </Col>
-        </Row>
+            </p>
+
+
+          </div>
+          :
+          <div>
+            <Row>
+              <Col span={8}>
+                <RadioGroup
+                  name="give"
+                  defaultValue={this.state.selectedGive}
+                  onChange={(event) => {
+                    this.update({selectedGive: event.target.value, selectedReceive: ''});
+                  }}
+                >
+                  <Table
+                    className="radio-table"
+                    columns={columnsGive}
+                    dataSource={columnsGiveData}
+                    pagination={false}
+                    bordered
+                  />
+                </RadioGroup>
+              </Col>
+              <Col span={8}>
+                <Table
+                  className="form-table"
+                  columns={columnsForm}
+                  dataSource={columnsFormData}
+                  pagination={false}
+                />
+              </Col>
+              <Col span={8}>
+                <RadioGroup
+                  name="receive"
+                  value={this.state.selectedReceive}
+                  onChange={(event) => {
+                    this.update({selectedReceive: event.target.value});
+                  }}
+                >
+                  <Table
+                    className="radio-table"
+                    columns={columnsReceive}
+                    dataSource={columnsReceiveData}
+                    pagination={false}
+                    bordered
+                  />
+                </RadioGroup>
+              </Col>
+            </Row>
+          </div>
+        }
         <div className={styles.footer}>
           <a onClick={(e) => { e.preventDefault(); this.update({ reviewsModalVisible: true }); }}>Отзывы</a>
           <a onClick={(e) => { e.preventDefault(); this.update({ rulesModalVisible: true }); }}>Правила</a>
