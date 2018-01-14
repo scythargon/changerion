@@ -5,9 +5,9 @@ from .models import Rate, Order
 
 @admin.register(Rate)
 class RateAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('created_at',)
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('created_at', 'updated_at')

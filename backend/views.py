@@ -1,10 +1,13 @@
 import json
+import time
+from datetime import timedelta
 
 from django.shortcuts import render, HttpResponse, render_to_response
 from django.http import JsonResponse
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils import timezone
 
 from .models import Order, Rate, ORDER_STATUS_NEW
 from .utils import load_currencies_info, get_rates
@@ -31,10 +34,27 @@ class OrderView(View):
 
         order.give_amount = form_data['giveAmount']
         order.receive_amount = form_data['receiveAmount']
+
         order.status = ORDER_STATUS_NEW
 
         order.wallet = form_data['wallet']
         order.email = form_data['email']
+        order.number = int(time.time() * 100)
         order.save()
 
-        return JsonResponse({'status': 'ok'})
+        seconds_left = int((timezone.now() + timedelta(minutes=10) - order.created_at).total_seconds())
+
+        currencies = load_currencies_info()
+        to_wallet = next(filter(lambda c: c.code == order.give, currencies))
+
+        return JsonResponse({
+            'status': 'ok',
+            'number': order.number,
+            'give': order.give,
+            'receive': order.receive,
+            'giveAmount': order.give_amount,
+            'receiveAmount': order.receive_amount,
+            'status': order.status,
+            'toWallet': to_wallet.wallet_address,
+            'secondsLeft': seconds_left,
+        })

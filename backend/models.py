@@ -9,12 +9,16 @@ class Rate(models.Model):
 
 ORDER_STATUS_NEW = 'new'  # Just created.
 ORDER_STATUS_PAID = 'paid'  # User pressed "payed".
+ORDER_STATUS_CANCELED = 'canceled'  # Order got canceled.
+ORDER_STATUS_TIMEOUT = 'timeout'  # Order timed out.
 ORDER_STATUS_RECEIVED = 'received'  # We have received the money.
 ORDER_STATUS_COMPLETED = 'completed'  # We have send the money back to the user.
 
 ORDER_STATUS_CHOICES = (
     (ORDER_STATUS_NEW, ORDER_STATUS_NEW),
     (ORDER_STATUS_PAID, ORDER_STATUS_PAID),
+    (ORDER_STATUS_CANCELED, ORDER_STATUS_CANCELED),
+    (ORDER_STATUS_TIMEOUT, ORDER_STATUS_TIMEOUT),
     (ORDER_STATUS_RECEIVED, ORDER_STATUS_RECEIVED),
     (ORDER_STATUS_COMPLETED, ORDER_STATUS_COMPLETED),
 )
@@ -36,3 +40,8 @@ class Order(models.Model):
 
     wallet = models.CharField(max_length=255, null=False, blank=False, default='')
     email = models.CharField(max_length=255, null=False, blank=False, default='')
+
+    number = models.BigIntegerField(null=False, blank=False, default=0)
+
+    def __str__(self):
+        return f'#{self.pk}: {self.give} -> {self.receive}'
