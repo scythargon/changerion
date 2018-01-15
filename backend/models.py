@@ -1,5 +1,9 @@
+from datetime import timedelta
+
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.utils import timezone
+from django.conf import settings
 
 
 class Rate(models.Model):
@@ -45,3 +49,24 @@ class Order(models.Model):
 
     def __str__(self):
         return f'#{self.pk}: {self.give} -> {self.receive}'
+
+    @property
+    def seconds_left(self):
+        return int((timedelta(minutes=settings.TIME_TO_COMPLETE_ORDER) + self.created_at - timezone.now()).total_seconds())
+
+    def to_dict(self):
+        from .utils import load_currencies_info, format_decimal
+
+        currencies = load_currencies_info()
+        to_wallet = next(filter(lambda c: c.code == self.give, currencies))
+        return {
+            'number': self.number,
+            'give': self.give,
+            'receive': self.receive,
+            'giveAmount': format_decimal(self.give_amount),
+            'receiveAmount': format_decimal(self.receive_amount),
+            'status': self.status,
+            'ourWallet': to_wallet.wallet_address,
+            'clientWallet': self.wallet,
+            'secondsLeft': self.seconds_left,
+        }

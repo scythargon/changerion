@@ -29,6 +29,7 @@
       };
 
       window.ratesId = {{ current_rates.pk }};
+      window.order = {{ order_data|safe }};
 
       window.courses = {
         {% for rate in rates %}

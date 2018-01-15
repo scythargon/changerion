@@ -149,7 +149,10 @@ export default class Dashboard extends Component {
     selectedPair = findPair(selectedGive, selectedReceive);
     const columnsFormData = this.getColumnsFormData(selectedPair);
 
+    const order = this.state.order || (window.order && window.order.secondsLeft > 0 && window.order);
+
     this.setState({
+      order,
       columnsGiveData,
       columnsReceiveData,
       columnsFormData,

@@ -41,6 +41,10 @@ def load_currencies_info():
     return currencies
 
 
+def format_decimal(d):
+    return format(d, 'f').rstrip('0').rstrip('.')
+
+
 def get_rates():
     """Get rates from the DB, add our fee and yield them as dictionaries."""
     current_rates = Rate.objects.last()
@@ -51,7 +55,7 @@ def get_rates():
         rates_values.append({
             'give': give,
             'receive': receive,
-            'amount': format(amount, 'f')
+            'amount': format_decimal(amount)
         })
 
     return current_rates, rates_values
