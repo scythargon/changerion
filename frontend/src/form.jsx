@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 import { Form, Icon, Input, Button } from 'antd';
-import { getIcon } from './utils';
+import { getIcon, getCookie } from './utils';
 import styles from './styles.less';
 
 const FormItem = Form.Item;
@@ -19,11 +19,7 @@ Big.prototype.format = function() {
   return this.toFixed(30).toString().replace(/.?0+$/, '');
 };
 
-const getCookie = function(name) {
-  var value = '; ' + document.cookie;
-  var parts = value.split('; ' + name + '=');
-  if (parts.length === 2) return parts.pop().split(';').shift();
-};
+
 
 class ExchangeForm extends React.Component {
 

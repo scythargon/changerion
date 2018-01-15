@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table, Row, Col, Radio, Button } from 'antd';
 import Countdown from 'react-countdown-now';
 import { WrappedExchangeForm } from './form.jsx';
-import { getIcon } from './utils';
+import { getIcon, getCookie } from './utils';
 import { RulesModal, ReservsModal, ContactsModal, ReviewsModal } from './modals';
 
 import 'antd/dist/antd.less';
@@ -172,6 +172,39 @@ export default class Dashboard extends Component {
     }];
   }
 
+  cancelOrder = () => {
+    fetch('/order/', {
+      method: 'DELETE',
+      mode: 'same-origin',
+      credentials: 'include',
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+      }
+    })
+      .then((response) => {
+        console.log(response);
+        this.setState({ order: null });
+      });
+  };
+
+  confirmOrder = () => {
+    fetch('/order/', {
+      method: 'PUT',
+      mode: 'same-origin',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      }
+    })
+      .then(response => response.json())
+      .then((data) => {
+        console.log(data);
+        this.setState({ order: data });
+      });
+  };
+
   render() {
     const {
       columnsGiveData,
@@ -217,8 +250,8 @@ export default class Dashboard extends Component {
               После оплаты обязательно нажать кнопку <b>Я оплатил</b>
             </p>
             <p style={{textAlign: 'center', marginBottom: '30px'}}>
-              <Button type="primary" style={{marginRight: '30px'}}>Я оплатил</Button>
-              <Button type="danger">Отменить заявку</Button>
+              <Button type="primary" onClick={this.confirmOrder} style={{marginRight: '30px'}}>Я оплатил</Button>
+              <Button type="danger" onClick={this.cancelOrder}>Отменить заявку</Button>
             </p>
             <p style={{textAlign: 'center'}}>
               <Countdown

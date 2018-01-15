@@ -1,3 +1,9 @@
 import { getIcon } from './icons.jsx';
 
-export { getIcon };
+const getCookie = function(name) {
+  var value = '; ' + document.cookie;
+  var parts = value.split('; ' + name + '=');
+  if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
+export { getIcon, getCookie };
