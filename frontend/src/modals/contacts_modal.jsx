@@ -26,9 +26,8 @@ export default class ContactsModal extends Component {
           </Button>,
         ]}
       >
-        <p>КОНТАКТЫ</p>
-        <p>КОНТАКТЫ</p>
-        <p>КОНТАКТЫ</p>
+        <p>Служба поддержки:</p>
+        <p><a href="mailto:changerion.exchange@gmail.com">Email</a></p>
       </Modal>
     );
   }

@@ -8,7 +8,11 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from .models import Order, Rate, ORDER_STATUS_NEW, ORDER_STATUS_CANCELED, ORDER_STATUS_PAID
+from .models import (Order, Rate,
+    ORDER_STATUS_NEW,
+    ORDER_STATUS_CANCELED,
+    ORDER_STATUS_PAID,
+    ORDER_STATUS_TIMEOUT)
 from .utils import load_currencies_info, get_rates
 
 
@@ -23,9 +27,11 @@ class RootView(View):
         order_pk = request.session.get('order_pk', None)
         if order_pk is not None:
             order = Order.objects.get(pk=order_pk)
-            if order.seconds_left > 0:
+            if order.seconds_left > 0 or order.status:
                 order_data = order.to_dict()
             else:
+                order.status = ORDER_STATUS_TIMEOUT
+                order.save()
                 print('deleting session')
                 del request.session['order_pk']
 

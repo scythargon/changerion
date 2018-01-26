@@ -20,7 +20,6 @@ Big.prototype.format = function() {
 };
 
 
-
 class ExchangeForm extends React.Component {
 
   state = {

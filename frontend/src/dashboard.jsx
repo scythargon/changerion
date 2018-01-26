@@ -149,7 +149,7 @@ export default class Dashboard extends Component {
     selectedPair = findPair(selectedGive, selectedReceive);
     const columnsFormData = this.getColumnsFormData(selectedPair);
 
-    const order = this.state.order || (window.order && window.order.secondsLeft > 0 && window.order);
+    const order = this.state.order || (window.order && window.order.status !== 'timeout' && window.order);
 
     this.setState({
       order,
@@ -229,7 +229,22 @@ export default class Dashboard extends Component {
     // };
     return (
       <div>
-        { order ?
+        { order ? order.status === 'paid' ?
+          <div style={{textAlign: 'center'}}>
+            <h2>ВЫ УСПЕШНО СОЗДАЛИ ЗАЯВКУ!</h2>
+            <h3>Ваша заявка № {order.number}</h3>
+
+            <p>Статус: <b>Заявка в обработке</b></p>
+
+            <p>{window.currencies_data[order.give].comment}</p>
+
+            <p>
+              Если у вас возникли сложности или есть вопросы, напишите в нашу &nbsp;
+              <a href="mailto:changerion.exchange@gmail.com">службу поддержки</a>
+            </p>
+            <p>С уважением, администрация сайта!</p>
+          </div>
+          :
           <div>
             <h2>ДЛЯ ЗАВЕРШЕНИЯ СОЗДАНИЯ ЗАЯВКИ № <u><b>{order.number}</b></u> ВАМ НЕОБХОДИМО:</h2>
             <p className={styles.block}>
@@ -259,8 +274,6 @@ export default class Dashboard extends Component {
                 renderer={countdownRenderer}
               />
             </p>
-
-
           </div>
           :
           <div>

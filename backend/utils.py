@@ -1,4 +1,7 @@
+import os
 import csv
+import pprint
+import smtplib
 from decimal import Decimal
 
 from .models import Rate
@@ -59,3 +62,30 @@ def get_rates():
         })
 
     return current_rates, rates_values
+
+
+email_template = """From: {from_addr}
+To: {to_addr}
+Subject: Changerion: New order!
+
+{text}
+"""
+from_addr = 'changerion.exchange@gmail.com'
+from_addr_passwd = os.environ.get('CHANGERION_EMAIL_PASSWORD', '')
+to_addr = 'scythargon@gmail.com'
+
+
+def send_email(order):
+    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+    smtpObj.ehlo()
+    smtpObj.starttls()
+    smtpObj.ehlo()
+    smtpObj.login(from_addr, from_addr_passwd)
+    msg = email_template.format(from_addr=from_addr,
+                                 to_addr=to_addr,
+                                 text=pprint.pformat(order.to_dict()))
+    print(msg)
+    smtpObj.sendmail(to_addrs=to_addr,
+                     from_addr=from_addr,
+                     msg=msg)
+    smtpObj.close()
