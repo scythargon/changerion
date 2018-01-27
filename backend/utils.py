@@ -5,6 +5,8 @@ import smtplib
 from decimal import Decimal
 from telethon import TelegramClient
 
+from django.conf import settings
+
 from .models import Rate
 
 
@@ -93,11 +95,16 @@ def send_email(order):
 
 
 api_id = 155315
-api_hash = os.environ.get('CHANGERION_EMAIL_PASSWORD', '')
+api_hash = os.environ.get('TELEGRAM_API_HASH', '')
 
-client = TelegramClient('session_name', api_id, api_hash)
-client.start(phone='+79994652468', password=os.environ.get('TELEGRAM_PASSWORD', ''))
+
+if not settings.DEBUG:
+    client = TelegramClient('session_name', api_id, api_hash)
+    client.start(phone='+79994652468', password=os.environ.get('TELEGRAM_PASSWORD', ''))
 
 
 def send_telegram(order):
-    client.send_message('@IFTTT', 'changerion: ' + pprint.pformat(order.to_dict()))
+    if not settings.DEBUG:
+        client.send_message('@IFTTT', 'changerion: ' + pprint.pformat(order.to_dict()))
+    else:
+        print('Not sending the telegram notification in DEBUG mode.' )
