@@ -26,7 +26,7 @@ export default class ReservsModal extends Component {
   render() {
     return (
       <Modal
-        width={600}
+        width={620}
         title="Резервы нашего обменника"
         visible={this.props.visible}
         onOk={this.close}
