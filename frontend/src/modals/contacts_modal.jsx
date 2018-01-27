@@ -17,6 +17,7 @@ export default class ContactsModal extends Component {
     return (
       <Modal
         title="Центр поддержки пользователей"
+        width={620}
         visible={this.props.visible}
         onOk={this.close}
         onCancel={this.close}
@@ -26,8 +27,12 @@ export default class ContactsModal extends Component {
           </Button>,
         ]}
       >
-        <p>Служба поддержки:</p>
-        <p><a href="mailto:changerion.exchange@gmail.com">Email</a></p>
+        <p>Уважаемые клиенты, мы с радостью проконсультируем Вас по любым вопросам.</p>
+
+        <p>Для этого вам стоит выбрать любой удобный способ связи:</p>
+
+        <p>Вы можете написать нам на <a href="mailto:changerion.exchange@gmail.com">электронную почту</a></p>
+
       </Modal>
     );
   }
