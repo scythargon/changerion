@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6cbp4dka29emq_8j07_8=xx9#d5jr0hf#@zl()g42irxpmf#ix'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('CHANGERION_DEBUG', True) != 'False'
 
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['127.0.0.1']
@@ -136,7 +136,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    ('', os.path.join(BASE_DIR, 'frontend/build')),
+    ('', os.path.join(BASE_DIR, 'frontend/build' if DEBUG else 'frontend/build_prod')),
 ]
 
 TIME_TO_COMPLETE_ORDER = 10  # Minutes.

@@ -205,124 +205,131 @@ export default class Dashboard extends Component {
       });
   };
 
-  render() {
+  renderSuccess() {
+    const {
+      order,
+    } = this.state;
+
+    return (<div style={{textAlign: 'center'}}>
+      <h2>ВЫ УСПЕШНО СОЗДАЛИ ЗАЯВКУ!</h2>
+      <h3>Ваша заявка № {order.number}</h3>
+
+      <p>Статус: <b>Заявка в обработке</b></p>
+
+      <p>{window.currencies_data[order.give].comment}</p>
+
+      <p>
+        Если у вас возникли сложности или есть вопросы, напишите в нашу &nbsp;
+        <a href="mailto:changerion.exchange@gmail.com">службу поддержки</a>
+      </p>
+      <p>С уважением, администрация сайта!</p>
+    </div>);
+  }
+
+  renderConfirm() {
+    const {
+      order,
+    } = this.state;
+    return (
+      <div>
+        <h2>ДЛЯ ЗАВЕРШЕНИЯ СОЗДАНИЯ ЗАЯВКИ № <u><b>{order.number}</b></u> ВАМ НЕОБХОДИМО:</h2>
+        <p className={styles.block}>
+          <span className={styles.step}>1</span>
+          Войти в свой кошелек.
+        </p>
+        <p className={styles.block}>
+          <span className={styles.step}>2</span>
+          Отправить <code>{order.giveAmount}</code> <b>{order.give}</b>
+          &nbsp; на кошелек <code>{order.ourWallet}</code>
+          <br/>
+          Вы получаете <code>{order.receiveAmount}</code> <b>{order.receive}</b> на Ваш кошелек <code>{order.clientWallet}</code>
+        </p>
+        <p className={`${styles.block} ${styles.last}`}>
+          <span className={styles.step}>3</span>
+          <b>Обязательно!</b>
+          <br/>
+          После оплаты обязательно нажать кнопку <b>Я оплатил</b>
+        </p>
+        <p style={{textAlign: 'center', marginBottom: '30px'}}>
+          <Button type="primary" onClick={this.confirmOrder} style={{marginRight: '30px'}}>Я оплатил</Button>
+          <Button type="danger" onClick={this.cancelOrder}>Отменить заявку</Button>
+        </p>
+        <p style={{textAlign: 'center'}}>
+          <Countdown
+            date={Date.now() + (order.secondsLeft * 1000)}
+            renderer={countdownRenderer}
+          />
+        </p>
+      </div>
+    )
+  }
+
+  renderMainForm() {
     const {
       columnsGiveData,
       columnsReceiveData,
       columnsFormData,
+    } = this.state;
+    return (
+      <div>
+        <Row>
+          <Col span={8}>
+            <RadioGroup
+              name="give"
+              defaultValue={this.state.selectedGive}
+              onChange={(event) => {
+                this.update({selectedGive: event.target.value, selectedReceive: ''});
+              }}
+            >
+              <Table
+                className="radio-table"
+                columns={columnsGive}
+                dataSource={columnsGiveData}
+                pagination={false}
+                bordered
+              />
+            </RadioGroup>
+          </Col>
+          <Col span={8}>
+            <Table
+              className="form-table"
+              columns={columnsForm}
+              dataSource={columnsFormData}
+              pagination={false}
+            />
+          </Col>
+          <Col span={8}>
+            <RadioGroup
+              name="receive"
+              value={this.state.selectedReceive}
+              onChange={(event) => {
+                this.update({selectedReceive: event.target.value});
+              }}
+            >
+              <Table
+                className="radio-table"
+                columns={columnsReceive}
+                dataSource={columnsReceiveData}
+                pagination={false}
+                bordered
+              />
+            </RadioGroup>
+          </Col>
+        </Row>
+      </div>
+    )
+  }
+
+  renderFooter() {
+    const {
       rulesModalVisible,
       reservsModalVisible,
       contactsModalVisible,
       reviewsModalVisible,
-      order,
     } = this.state;
-    // const order = {
-    //   clientWallet: 'dfg',
-    //   give: 'BTC',
-    //   giveAmount: '1',
-    //   number: 151595795265,
-    //   ourWallet: '14PYfJnauYY2ugczKU2snKZg3rZV6WjAZz',
-    //   receive: 'BCH',
-    //   receiveAmount: '5.739763202',
-    //   secondsLeft: 600,
-    //   status: 'new',
-    // };
+
     return (
       <div>
-        { order ? order.status === 'paid' ?
-          <div style={{textAlign: 'center'}}>
-            <h2>ВЫ УСПЕШНО СОЗДАЛИ ЗАЯВКУ!</h2>
-            <h3>Ваша заявка № {order.number}</h3>
-
-            <p>Статус: <b>Заявка в обработке</b></p>
-
-            <p>{window.currencies_data[order.give].comment}</p>
-
-            <p>
-              Если у вас возникли сложности или есть вопросы, напишите в нашу &nbsp;
-              <a href="mailto:changerion.exchange@gmail.com">службу поддержки</a>
-            </p>
-            <p>С уважением, администрация сайта!</p>
-          </div>
-          :
-          <div>
-            <h2>ДЛЯ ЗАВЕРШЕНИЯ СОЗДАНИЯ ЗАЯВКИ № <u><b>{order.number}</b></u> ВАМ НЕОБХОДИМО:</h2>
-            <p className={styles.block}>
-              <span className={styles.step}>1</span>
-              Войти в свой кошелек.
-            </p>
-            <p className={styles.block}>
-              <span className={styles.step}>2</span>
-              Отправить <code>{order.giveAmount}</code> <b>{order.give}</b>
-              &nbsp; на кошелек <code>{order.ourWallet}</code>
-              <br/>
-              Вы получаете <code>{order.receiveAmount}</code> <b>{order.receive}</b> на Ваш кошелек <code>{order.clientWallet}</code>
-            </p>
-            <p className={`${styles.block} ${styles.last}`}>
-              <span className={styles.step}>3</span>
-              <b>Обязательно!</b>
-              <br/>
-              После оплаты обязательно нажать кнопку <b>Я оплатил</b>
-            </p>
-            <p style={{textAlign: 'center', marginBottom: '30px'}}>
-              <Button type="primary" onClick={this.confirmOrder} style={{marginRight: '30px'}}>Я оплатил</Button>
-              <Button type="danger" onClick={this.cancelOrder}>Отменить заявку</Button>
-            </p>
-            <p style={{textAlign: 'center'}}>
-              <Countdown
-                date={Date.now() + (order.secondsLeft * 1000)}
-                renderer={countdownRenderer}
-              />
-            </p>
-          </div>
-          :
-          <div>
-            <Row>
-              <Col span={8}>
-                <RadioGroup
-                  name="give"
-                  defaultValue={this.state.selectedGive}
-                  onChange={(event) => {
-                    this.update({selectedGive: event.target.value, selectedReceive: ''});
-                  }}
-                >
-                  <Table
-                    className="radio-table"
-                    columns={columnsGive}
-                    dataSource={columnsGiveData}
-                    pagination={false}
-                    bordered
-                  />
-                </RadioGroup>
-              </Col>
-              <Col span={8}>
-                <Table
-                  className="form-table"
-                  columns={columnsForm}
-                  dataSource={columnsFormData}
-                  pagination={false}
-                />
-              </Col>
-              <Col span={8}>
-                <RadioGroup
-                  name="receive"
-                  value={this.state.selectedReceive}
-                  onChange={(event) => {
-                    this.update({selectedReceive: event.target.value});
-                  }}
-                >
-                  <Table
-                    className="radio-table"
-                    columns={columnsReceive}
-                    dataSource={columnsReceiveData}
-                    pagination={false}
-                    bordered
-                  />
-                </RadioGroup>
-              </Col>
-            </Row>
-          </div>
-        }
         <div className={styles.footer}>
           <a onClick={(e) => { e.preventDefault(); this.update({ reviewsModalVisible: true }); }}>Отзывы</a>
           <a onClick={(e) => { e.preventDefault(); this.update({ rulesModalVisible: true }); }}>Правила</a>
@@ -336,4 +343,37 @@ export default class Dashboard extends Component {
       </div>
     );
   }
-}
+
+  render() {
+    const {
+      order,
+    } = this.state;
+    // const order = {
+    //   clientWallet: 'dfg',
+    //   give: 'BTC',
+    //   giveAmount: '1',
+    //   number: 151595795265,
+    //   ourWallet: '14PYfJnauYY2ugczKU2snKZg3rZV6WjAZz',
+    //   receive: 'BCH',
+    //   receiveAmount: '5.739763202',
+    //   secondsLeft: 600,
+    //   status: 'new',
+    // };
+    let body;
+
+    if (!order || order.status === 'completed') {
+      body = this.renderMainForm();
+    } else if (order.status === 'new') {
+      body = this.renderConfirm();
+    } else {
+      body = this.renderSuccess();
+    }
+
+    return (
+      <div>
+        {body}
+        {this.renderFooter()}
+      </div>
+    );
+  }
+};

@@ -18,7 +18,10 @@ services:
     depends_on:
       - postgres
     ports:
-      - "8001:8080"
+      - "8001:80"
+    environment:
+      - CHANGERION_DEBUG=False
+      - CHANGERION_EMAIL_PASSWORD=${CHANGERION_EMAIL_PASSWORD}
     volumes:
       - .:/code
 

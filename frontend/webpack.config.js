@@ -2,12 +2,14 @@ var webpack = require("webpack");
 var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var WatchLiveReloadPlugin = require('webpack-watch-livereload-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const ExtractStyles = new ExtractTextPlugin({
   filename: `css/app.[contenthash].css`,
   allChunks: true
 });
 
+const isProd = !!process.env.FRONT_ENV;
 
 const styles = function (use) {
   return ExtractStyles.extract({ use, fallback: 'style-loader' });
@@ -30,7 +32,7 @@ module.exports = {
     './assets/scss/main.scss'
   ],
   output: {
-    path: path.join(__dirname, './build/'),
+    path: path.join(__dirname, isProd ? './build_prod/' : './build/'),
     filename: 'js/main.js'
   },
   resolve: {
@@ -58,12 +60,15 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('css/main.css'),
-    new WatchLiveReloadPlugin({
+    !isProd ? new WatchLiveReloadPlugin({
       files: [
         'monks_index.html',
         'build/css/main.css',
         'build/js/main.js',
       ]
+    }) : new UglifyJsPlugin({
+      parallel: true,
+      cache: true,
     }),
   ]
 };
