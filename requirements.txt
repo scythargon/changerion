@@ -8,6 +8,7 @@ django-extensions==1.9.8
 django-object-actions==0.10.0
 django-robust==0.1.13
 Flask==0.12.2
+future==0.16.0
 idna==2.6
 ipdb==0.10.3
 ipython==6.2.1
@@ -22,14 +23,19 @@ pickleshare==0.7.4
 prompt-toolkit==1.0.15
 psycopg2==2.7.3.2
 ptyprocess==0.5.2
+pyaes==1.6.1
+pyasn1==0.4.2
 Pygments==2.2.0
+python-telegram-bot==9.0.0
 pytz==2017.3
 redis==2.10.6
 requests==2.18.4
+rsa==3.4.2
 schedule==0.5.0
 simplegeneric==0.8.1
 simplejson==3.13.2
 six==1.11.0
+Telethon==0.16.2.3
 traitlets==4.3.2
 typing==3.6.2
 urllib3==1.22

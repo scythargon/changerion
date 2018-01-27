@@ -13,7 +13,8 @@ from .models import (Order, Rate,
     ORDER_STATUS_CANCELED,
     ORDER_STATUS_PAID,
     ORDER_STATUS_TIMEOUT)
-from .utils import load_currencies_info, get_rates
+
+from .utils import load_currencies_info, get_rates, send_telegram
 
 
 class RootView(View):
@@ -84,5 +85,7 @@ class OrderView(View):
             order.status = ORDER_STATUS_PAID
             order.save()
             print(f'paid order #{order.pk}')
+            send_telegram(order)
+            print('sent telegram')
             return JsonResponse(order.to_dict())
         return HttpResponse(status=401)

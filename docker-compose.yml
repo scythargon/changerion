@@ -22,6 +22,8 @@ services:
     environment:
       - CHANGERION_DEBUG=False
       - CHANGERION_EMAIL_PASSWORD=${CHANGERION_EMAIL_PASSWORD}
+      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH}
+      - TELEGRAM_PASSWORD=${TELEGRAM_PASSWORD}
     volumes:
       - .:/code
 

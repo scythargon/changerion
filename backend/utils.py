@@ -3,6 +3,7 @@ import csv
 import pprint
 import smtplib
 from decimal import Decimal
+from telethon import TelegramClient
 
 from .models import Rate
 
@@ -89,3 +90,14 @@ def send_email(order):
                      from_addr=from_addr,
                      msg=msg)
     smtpObj.close()
+
+
+api_id = 155315
+api_hash = os.environ.get('CHANGERION_EMAIL_PASSWORD', '')
+
+client = TelegramClient('session_name', api_id, api_hash)
+client.start(phone='+79994652468', password=os.environ.get('TELEGRAM_PASSWORD', ''))
+
+
+def send_telegram(order):
+    client.send_message('@IFTTT', 'changerion: ' + pprint.pformat(order.to_dict()))
