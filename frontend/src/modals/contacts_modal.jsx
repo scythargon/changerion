@@ -31,7 +31,11 @@ export default class ContactsModal extends Component {
 
         <p>Для этого вам стоит выбрать любой удобный способ связи:</p>
 
-        <p>Вы можете написать нам на <a href="mailto:changerion.exchange@gmail.com">электронную почту</a></p>
+        <p>Вы можете воспользоваться оперативной поддержкой в чате, который расположен в правом нижнем углу.</p>
+
+        <p>Или написать нам в Телеграм <a href="https://t.me/ChangerionSupport">@ChangerionSupport</a></p>
+
+        <p>Или написать нам на <a href="mailto:changerion.exchange@gmail.com">электронную почту</a></p>
 
       </Modal>
     );
