@@ -68,7 +68,7 @@ button::-moz-focus-inner {
 #content {
   max-width: 950px;
   margin: auto;
-  padding: 80px 0px 0px; }
+  padding: 30px 0px 0px; }
   #content .ant-form-item-control {
     line-height: 31px; }
   #content .ant-form-item {
@@ -90,3 +90,11 @@ button::-moz-focus-inner {
 .form-table .ant-table-tbody > tr > td,
 .form-table .ant-table-thead > tr > th {
   border-bottom: none; }
+
+.form-table .ant-table-thead > tr > th {
+  display: none; }
+
+.form-table .ant-table {
+  border-radius: 0; }
+  .form-table .ant-table table {
+    border-radius: 0; }

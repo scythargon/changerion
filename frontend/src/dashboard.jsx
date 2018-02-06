@@ -261,7 +261,7 @@ export default class Dashboard extends Component {
           />
         </p>
       </div>
-    )
+    );
   }
 
   renderMainForm() {
@@ -273,6 +273,22 @@ export default class Dashboard extends Component {
     return (
       <div>
         <Row>
+          <div style={{
+            backgroundColor: '#1890FF',
+            height: '80px',
+            display: 'table',
+            width: '100%',
+            textAlign: 'center'
+          }}>
+            <h1 style={{
+              color: 'white',
+              display: 'table-cell',
+              verticalAlign: 'middle',
+              fontSize: '25px',
+            }}>
+              Самые выгодные цены для обмена!
+            </h1>
+          </div>
           <Col span={8}>
             <RadioGroup
               name="give"
@@ -317,7 +333,7 @@ export default class Dashboard extends Component {
           </Col>
         </Row>
       </div>
-    )
+    );
   }
 
   renderFooter() {
@@ -335,6 +351,14 @@ export default class Dashboard extends Component {
           <a onClick={(e) => { e.preventDefault(); this.update({ rulesModalVisible: true }); }}>Правила</a>
           <a onClick={(e) => { e.preventDefault(); this.update({ reservsModalVisible: true }); }}>Резервы</a>
           <a onClick={(e) => { e.preventDefault(); this.update({ contactsModalVisible: true }); }}>Контакты</a>
+          <br/>
+          <br/>
+          <p>Обменник криптовалют</p>
+          <p>Обмен за 15 минут в нашем обменнике Вы можете выполнить с
+            Bitcoin, Etherium, Ripple, Litecoin, Monero и многими другими криптовалютами.</p>
+          <br/>
+          <p>&copy; 2018, Changerion.com &mdash; обмен криптовалют</p>
+          <br/>
         </div>
         <ReviewsModal visible={reviewsModalVisible} updateParent={this.update} />
         <RulesModal visible={rulesModalVisible} updateParent={this.update} />
